@@ -1,0 +1,103 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+Properties properties = new Properties()
+boolean isHasFile = false
+File file = new File(rootDir.getAbsolutePath() + "/local.properties")
+if (file.exists()) {
+    isHasFile = true
+    properties.load(file.newDataInputStream())
+}
+
+def gitUrl = 'https://github.com/whosmyqueen/PhotoView.git'   // Git仓库的url
+def siteUrl = 'https://github.com/whosmyqueen/PhotoView'   // 项目的主页
+
+version = "2.3.0"
+group = "com.whosmyqueen.widget"
+def modelId = "photo-view"
+
+
+bintray {
+    user = isHasFile ? properties.getProperty("bintray.user") : System.getenv("bintray_user")
+    key = isHasFile ? properties.getProperty("bintray.apikey") : System.getenv("bintray_apikey")
+
+    pkg {
+        repo = 'maven'
+        name = modelId
+        licenses = ["Apache-2.0"]
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        publish = true
+
+        version {
+            name = version
+            desc = modelId
+            released = new Date()
+            vcsTag = 'v' + version
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+        }
+    }
+    configurations = ['archives']
+}
+
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'jar'
+                // Add your description here
+                name modelId
+                artifactId modelId
+                description '养殖SDK'
+                url siteUrl
+                // Adds javadocs and sources as separate jars.
+                // Set your license
+                licenses {
+                    license {
+                        name 'Apache-2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'whosmyqueen'        //填写bintray或者github的用户名
+                        name '郑志辉'         //姓名，可以是中文
+                        email '644049260@qq.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompileProvider.get().classpath
+        }
+    }
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+artifacts {
+    archives androidJavadocsJar
+    archives sourceJar
+}
