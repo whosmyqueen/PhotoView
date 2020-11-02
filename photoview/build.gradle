@@ -13,7 +13,7 @@ android {
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.appcompat:appcompat:1.2.0"
 }
 
 afterEvaluate {
@@ -22,8 +22,8 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
 
-                group = 'com.github.chrisbanes'
-                artifactId = 'PhotoView'
+                group = 'com.whosmyqueen.widget'
+                artifactId = 'photo-view'
                 version = '2.3.0'
 
                 // Adds javadocs and sources as separate jars.
@@ -33,7 +33,7 @@ afterEvaluate {
                 pom {
                     name = 'PhotoView'
                     description = 'A simple ImageView that support zooming, both by Multi-touch gestures and double-tap.'
-                    url = 'https://github.com/chrisbanes/PhotoView'
+                    url = 'https://github.com/whosmyqueen/PhotoView'
                     licenses {
                         license {
                             name = 'The Apache License, Version 2.0'
@@ -47,9 +47,9 @@ afterEvaluate {
                         }
                     }
                     scm {
-                        connection = 'scm:git@github.com/chrisbanes/PhotoView.git'
-                        developerConnection = 'scm:git@github.com/chrisbanes/PhotoView.git'
-                        url = 'https://github.com/chrisbanes/PhotoView'
+                        connection = 'https://github.com/whosmyqueen/PhotoView.git'
+                        developerConnection = 'https://github.com/whosmyqueen/PhotoView.git'
+                        url = 'https://github.com/whosmyqueen/PhotoView'
                     }
                 }
             }
