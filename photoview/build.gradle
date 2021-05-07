@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'com.github.dcendents.android-maven'  //添加这两行
+group = 'com.github.whosmyqueen'  //GitHub昵称
 android {
     compileSdkVersion rootProject.ext.sdkVersion
 
@@ -14,5 +15,3 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:1.2.0"
 }
-
-apply from: '../bintray.gradle'
